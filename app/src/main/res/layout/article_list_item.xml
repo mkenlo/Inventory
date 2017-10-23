@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/medium_spacing">
+
+    <ImageView
+        android:id="@+id/article_image"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:src="@drawable/ic_add_a_photo"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"/>
+    <TextView
+        android:id="@+id/article_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/article_name"
+        android:layout_toEndOf="@id/article_image"
+        android:layout_toRightOf="@id/article_image"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="@dimen/medium_spacing"/>
+    <TextView
+        android:id="@+id/article_availability"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Available : "
+        android:textColor="@color/colorSecondaryText"
+        android:textStyle="italic"
+        android:layout_below="@id/article_name"
+        android:layout_alignStart="@id/article_name"
+        android:layout_alignLeft="@id/article_name"
+        android:layout_marginTop="@dimen/small_spacing"
+        android:padding="@dimen/small_spacing"/>
+    <TextView
+        android:id="@+id/article_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="12"
+        android:layout_alignBottom="@+id/shop_article"
+        android:layout_toRightOf="@+id/article_availability"
+        android:layout_toEndOf="@+id/article_availability" />
+    <Button
+        android:id="@+id/shop_article"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="shop"
+        android:textAllCaps="false"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@color/colorWhite"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+
+</RelativeLayout>
