@@ -19,18 +19,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddArticleActivity"
-            android:label="Add a new article">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-            </activity>
-        <activity android:name=".DetailArticleActivity"
-            android:label="Item Detail">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
     </application>
 
 </manifest>

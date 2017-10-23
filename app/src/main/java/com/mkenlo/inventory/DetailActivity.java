@@ -7,7 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class DetailArticleActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +31,7 @@ public class DetailArticleActivity extends AppCompatActivity {
 
         switch(id){
             case R.id.menu_edit:
-                Intent intent = new Intent(this, AddArticleActivity.class);
+                Intent intent = new Intent(this, EditorActivity.class);
                 startActivity(intent);
 
                 break;

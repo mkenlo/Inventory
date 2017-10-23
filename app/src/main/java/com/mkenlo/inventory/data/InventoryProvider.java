@@ -1,0 +1,99 @@
+package com.mkenlo.inventory.data;
+
+import android.content.ContentProvider;
+import android.content.ContentUris;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
+import android.content.UriMatcher;
+
+
+public class InventoryProvider extends ContentProvider {
+
+
+    private static final int ARTICLE = 100;
+    private static final int ARTICLE_ID = 200;
+    private static final int DELETED_ARTICLE = 500;
+
+
+    private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+
+    static {
+        sURIMatcher.addURI(InventoryContract.AUTHORITY, "articles", ARTICLE);
+        sURIMatcher.addURI(InventoryContract.AUTHORITY, "articles/#", ARTICLE_ID);
+    }
+
+    InventoryDbHelper mDbHelper;
+
+
+    @Override
+    public boolean onCreate() {
+
+        mDbHelper = new InventoryDbHelper(getContext());
+        return true;
+    }
+
+    @Override
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        Cursor cursor = null;
+        int match = sURIMatcher.match(uri);
+
+        switch (match) {
+            case ARTICLE:
+                break;
+            case ARTICLE_ID:
+                selection = InventoryContract.Entries.ARTICLE_ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown URI" + uri);
+        }
+
+        cursor = db.query(InventoryContract.Entries.TABLE_ARTICLE,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder);
+        return cursor;
+    }
+
+    @Override
+    public Uri insert(Uri uri, ContentValues contentValues) {
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        if (sURIMatcher.match(uri) == ARTICLE){
+            long itemId = db.insert(InventoryContract.Entries.TABLE_ARTICLE, null, contentValues);
+            return itemId>0 ? ContentUris.withAppendedId(uri,itemId) : null;
+        }
+
+        return null;
+    }
+
+    @Override
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
+        return 0;
+    }
+
+    @Override
+    public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        if (sURIMatcher.match(uri) == ARTICLE_ID){
+            selection = InventoryContract.Entries.ARTICLE_ID + "=?";
+            selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+            return db.update(InventoryContract.Entries.TABLE_ARTICLE, contentValues, selection,selectionArgs);
+        }
+        return 0;
+    }
+
+    @Override
+    public String getType(Uri uri) {
+        return null;
+
+    }
+
+}

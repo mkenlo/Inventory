@@ -3,7 +3,7 @@ package com.mkenlo.inventory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class AddArticleActivity extends AppCompatActivity {
+public class EditorActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
