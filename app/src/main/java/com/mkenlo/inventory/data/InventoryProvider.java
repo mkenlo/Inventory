@@ -76,11 +76,27 @@ public class InventoryProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
+
+        /**
+         * DELETE * FROM ARTICLES WHERE ARTICLE_ID = ??
+         */
+
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        if (sURIMatcher.match(uri) == ARTICLE_ID){
+            selection = InventoryContract.Entries.ARTICLE_ID + "=?";
+            selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+            return db.delete(InventoryContract.Entries.TABLE_ARTICLE, selection,selectionArgs);
+        }
         return 0;
     }
 
     @Override
     public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
+
+        /**
+         *
+         * UPDATE FROM ARTICLES WHERE ARTICLE_ID =?
+         */
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         if (sURIMatcher.match(uri) == ARTICLE_ID){
             selection = InventoryContract.Entries.ARTICLE_ID + "=?";
@@ -92,7 +108,15 @@ public class InventoryProvider extends ContentProvider {
 
     @Override
     public String getType(Uri uri) {
-        return null;
+        final int match = sURIMatcher.match(uri);
+        switch (match) {
+            case ARTICLE:
+                return InventoryContract.CONTENT_LIST_TYPE;
+            case ARTICLE_ID:
+                return InventoryContract.CONTENT_ITEM_TYPE;
+            default:
+                throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
+        }
 
     }
 

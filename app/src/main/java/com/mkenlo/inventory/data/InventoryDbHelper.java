@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import static com.mkenlo.inventory.data.InventoryContract.Entries.ARTICLE_DESCRIPTION;
 import static com.mkenlo.inventory.data.InventoryContract.Entries.ARTICLE_ID;
 import static com.mkenlo.inventory.data.InventoryContract.Entries.ARTICLE_IMAGE;
 import static com.mkenlo.inventory.data.InventoryContract.Entries.ARTICLE_NAME;
@@ -24,6 +25,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
                     ARTICLE_IMAGE + "TEXT," +
                     ARTICLE_NAME + " TEXT," +
                     ARTICLE_PRICE + " REAL, " +
+                    ARTICLE_DESCRIPTION + "TEXT," +
                     ARTICLE_QUANTITY + " INTEGER )";
 
     private static final String DELETE_TABLE_ARTICLE =

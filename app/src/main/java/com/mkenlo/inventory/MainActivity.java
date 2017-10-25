@@ -1,6 +1,8 @@
 package com.mkenlo.inventory;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,9 +16,11 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.mkenlo.inventory.data.ArticleModel;
+import com.mkenlo.inventory.data.InventoryContract;
 import com.mkenlo.inventory.data.InventoryDbHelper;
 
 import java.util.List;
@@ -24,9 +28,11 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     List<ArticleModel> itemList;
-    ArticleRecyclerAdapter mAdapter;
+    ArticleAdapter mAdapter;
     InventoryDbHelper mDbHelper;
-    RecyclerView itemListView;
+    ListView itemListView;
+    final static String[] projection = InventoryContract.Entries.PROJECTION;
+
 
 
     @Override
@@ -45,17 +51,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //mDbHelper.onCreate();
-        itemListView =(RecyclerView) findViewById(R.id.article_list);
 
-        /*itemListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        Cursor cursor = getContentResolver().query(InventoryContract.CONTENT_URI, projection, null, null, null);
+
+
+        itemListView =(ListView) findViewById(R.id.article_list);
+        mAdapter = new ArticleAdapter(this, cursor);
+        itemListView.setAdapter(mAdapter);
+
+        itemListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent detail = new Intent(view.getContext(), DetailArticleActivity.class);
+                Intent detail = new Intent(view.getContext(), DetailActivity.class);
                 startActivity(detail);
 
             }
-        });*/
+        });
+
+//        cursor.close();
     }
 
     @Override
@@ -75,44 +88,5 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public class ArticleRecyclerAdapter extends RecyclerView.Adapter<ArticleRecyclerAdapter.ViewHolder> {
 
-        public ArticleRecyclerAdapter() {
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.article_list_item, parent, false);
-            return new ArticleRecyclerAdapter.ViewHolder(v);
-        }
-
-
-        @Override
-        public void onBindViewHolder(ArticleRecyclerAdapter.ViewHolder holder, int position) {
-            ArticleModel item = itemList.get(position);
-            holder.article_name.setText(item.getName());
-            holder.article_quantity.setText(item.getQuantity());
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return itemList.size();
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            TextView article_name;
-            TextView article_quantity;
-            ImageView article_image;
-
-            public ViewHolder(View v) {
-                super(v);
-
-                article_name = (TextView) v.findViewById(R.id.article_name);
-                article_quantity = (TextView) v.findViewById(R.id.article_quantity);
-                article_image = (ImageView) v.findViewById(R.id.article_image);
-
-            }
-        }
-    }
 }

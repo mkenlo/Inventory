@@ -19,6 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".EditorActivity"
+            android:label="edit item"/>
+        <activity android:name=".DetailActivity"
+            android:label="item detail"/>
     </application>
 
 </manifest>
