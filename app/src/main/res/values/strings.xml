@@ -9,9 +9,8 @@
     <string name="article_price">"$ 2.5" </string>
     <string name="article_description">
         "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.\n"
-        "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputat"
     </string>
     <string name="article_quantity">12</string>
-    <string name="article_availability">Available</string>
+    <string name="article_availability">Quantity</string>
     <string name="order_article">Order more</string>
 </resources>

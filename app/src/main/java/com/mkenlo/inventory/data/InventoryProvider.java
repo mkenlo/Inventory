@@ -20,8 +20,8 @@ public class InventoryProvider extends ContentProvider {
     private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
-        sURIMatcher.addURI(InventoryContract.AUTHORITY, "articles", ARTICLE);
-        sURIMatcher.addURI(InventoryContract.AUTHORITY, "articles/#", ARTICLE_ID);
+        sURIMatcher.addURI(InventoryContract.AUTHORITY, InventoryContract.CONTENT_PATH, ARTICLE);
+        sURIMatcher.addURI(InventoryContract.AUTHORITY, InventoryContract.CONTENT_PATH+"/#", ARTICLE_ID);
     }
 
     InventoryDbHelper mDbHelper;
@@ -65,13 +65,17 @@ public class InventoryProvider extends ContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        int match = sURIMatcher.match(uri);
 
-        if (sURIMatcher.match(uri) == ARTICLE){
+        if ( match == ARTICLE){
             long itemId = db.insert(InventoryContract.Entries.TABLE_ARTICLE, null, contentValues);
             return itemId>0 ? ContentUris.withAppendedId(uri,itemId) : null;
         }
+        else{
+            throw new IllegalArgumentException("Unknown URI " + uri);
+        }
 
-        return null;
+        //return null;
     }
 
     @Override

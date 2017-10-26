@@ -2,12 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
     android:padding="@dimen/medium_spacing">
 
     <ImageView
         android:id="@+id/article_image"
         android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_height="48dp"
         android:src="@drawable/ic_add_a_photo"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"/>
@@ -27,11 +28,10 @@
         android:text="Available : "
         android:textColor="@color/colorSecondaryText"
         android:textStyle="italic"
-        android:layout_below="@id/article_name"
-        android:layout_alignStart="@id/article_name"
-        android:layout_alignLeft="@id/article_name"
-        android:layout_marginTop="@dimen/small_spacing"
-        android:padding="@dimen/small_spacing"/>
+        android:layout_alignBaseline="@+id/article_quantity"
+        android:layout_alignBottom="@+id/article_quantity"
+        android:layout_alignLeft="@+id/article_name"
+        android:layout_alignStart="@+id/article_name" />
     <TextView
         android:id="@+id/article_quantity"
         android:layout_width="wrap_content"
@@ -44,7 +44,7 @@
         android:id="@+id/shop_article"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="shop"
+        android:text="sale"
         android:textAllCaps="false"
         android:background="@color/colorPrimaryDark"
         android:textColor="@color/colorWhite"

@@ -19,10 +19,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".EditorActivity"
-            android:label="edit item"/>
-        <activity android:name=".DetailActivity"
-            android:label="item detail"/>
+        <activity
+            android:name=".AddActivity"
+            android:label="Add new item" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".DetailActivity"
+            android:label="Item detail">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+
+        <provider
+            android:name=".data.InventoryProvider"
+            android:authorities="com.mkenlo.inventory"
+            android:exported="false" />
+
+        <activity android:name=".EditActivity"
+            android:label="Edit item">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".DetailActivity" />
+        </activity>
     </application>
 
 </manifest>

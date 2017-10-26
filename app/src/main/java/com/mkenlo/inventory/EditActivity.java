@@ -1,41 +1,44 @@
 package com.mkenlo.inventory;
 
 import android.content.ContentUris;
-import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.net.Uri;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mkenlo.inventory.data.InventoryContract;
 
-public class DetailActivity extends AppCompatActivity {
+public class EditActivity extends AppCompatActivity {
+
 
     TextView itemName;
+    TextView itemDescription;
     TextView itemQuantity;
     TextView itemPrice;
-    TextView itemDescription;
-    ImageView article_image;
-    long article_id;
+    ImageView itemImage;
+    ImageButton itemSave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+        setContentView(R.layout.activity_edit);
 
         itemName = (TextView) findViewById(R.id.article_name);
+        itemDescription = (TextView) findViewById(R.id.article_description);
         itemQuantity = (TextView) findViewById(R.id.article_quantity);
         itemPrice = (TextView) findViewById(R.id.article_price);
-        itemDescription = (TextView) findViewById(R.id.article_description);
-        article_image = (ImageView) findViewById(R.id.article_image);
+        itemImage = (ImageView) findViewById(R.id.article_image);
+        itemSave = (ImageButton) findViewById(R.id.save_item);
 
-        Intent intent = getIntent();
-        article_id = intent.getLongExtra("itemId", 1);
-        Uri uri = ContentUris.withAppendedId(InventoryContract.CONTENT_URI, article_id);
+        Bundle bundle = getIntent().getExtras();
+        long itemId = bundle.getLong("itemId", 1);
+
+        Uri uri = ContentUris.withAppendedId(InventoryContract.CONTENT_URI, itemId);
         Cursor cursor = getContentResolver().query(
                 uri,
                 InventoryContract.Entries.PROJECTION,
@@ -55,44 +58,23 @@ public class DetailActivity extends AppCompatActivity {
             /**
              * TODO:  get Bitmap image from a string value
              */
-            // article_image.setImageBitmap((cursor.getString(cursor.getColumnIndexOrThrow(InventoryContract.Entries.ARTICLE_IMAGE))));
 
-            // MenuItem edit_menu = (MenuItem) findViewById(R.id.menu_edit);
-
-            // edit_menu.setIntent(edit);
         }
 
+        itemSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            if (editItem(v)) {
+                Toast.makeText(v.getContext(), "Edit Item saved", Toast.LENGTH_LONG);
+            } else Toast.makeText(v.getContext(), "Oups!! Error occured", Toast.LENGTH_LONG);
+            }
+        });
     }
 
+    public boolean editItem(View v) {
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_add_article, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.menu_edit:
-
-                Intent edit = new Intent(this, EditActivity.class);
-                edit.putExtra("itemId", article_id);
-                startActivity(edit);
-                break;
-
-            case R.id.menu_save:
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-
-    public void adjustItemQuantity(int value){
 
     }
+
 }

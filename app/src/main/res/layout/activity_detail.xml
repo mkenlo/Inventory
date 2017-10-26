@@ -4,11 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.mkenlo.inventory.EditorActivity">
+    tools:context="com.mkenlo.inventory.DetailActivity">
 
-
-   <include layout="@layout/content_add_article"/>
-
+    <include layout="@layout/content_detail_item"/>
 
 </android.support.design.widget.CoordinatorLayout>

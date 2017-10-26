@@ -22,10 +22,10 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_ARTICLE =
             "CREATE TABLE " + TABLE_ARTICLE + " (" +
                     ARTICLE_ID + " INTEGER PRIMARY KEY," +
-                    ARTICLE_IMAGE + "TEXT," +
+                    ARTICLE_IMAGE + " TEXT," +
                     ARTICLE_NAME + " TEXT," +
                     ARTICLE_PRICE + " REAL, " +
-                    ARTICLE_DESCRIPTION + "TEXT," +
+                    ARTICLE_DESCRIPTION + " TEXT," +
                     ARTICLE_QUANTITY + " INTEGER )";
 
     private static final String DELETE_TABLE_ARTICLE =
