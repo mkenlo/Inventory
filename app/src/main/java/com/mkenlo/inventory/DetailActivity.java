@@ -101,11 +101,11 @@ public class DetailActivity extends AppCompatActivity {
         int qty = item.getQuantity();
         switch (order) {
             case "increment":
-                item.setQuantity(qty++);
+                item.setQuantity(qty+1);
                 break;
             case "decrement":
                 if(qty>0)
-                    item.setQuantity(qty--);
+                    item.setQuantity(qty-1);
                 break;
         }
         updateItem();

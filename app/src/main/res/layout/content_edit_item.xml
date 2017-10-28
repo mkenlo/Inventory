@@ -7,9 +7,10 @@
     <ImageButton
         android:id="@+id/article_image"
         android:layout_width="match_parent"
-        android:layout_height="192dp"
+        android:layout_height="@dimen/thumbnail_height"
         android:background="@color/colorPrimaryLight"
         android:src="@drawable/ic_add_a_photo" />
+
 
     <EditText
         android:id="@+id/article_name"
@@ -17,17 +18,18 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/medium_spacing"
         android:hint="@string/article_name"
-        android:inputType="text" />
+        android:inputType="text|textCapWords" />
+
 
     <EditText
         android:id="@+id/article_description"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:layout_marginBottom="@dimen/medium_spacing"
         android:layout_marginLeft="@dimen/medium_spacing"
         android:layout_marginRight="@dimen/medium_spacing"
-        android:hint="Article Description"
-        android:inputType="textMultiLine" />
+        android:hint="@string/article_description"
+        android:inputType="text|textMultiLine" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,7 +43,7 @@
             android:layout_marginLeft="@dimen/medium_spacing"
             android:layout_marginRight="@dimen/medium_spacing"
             android:layout_weight="1"
-            android:hint="quantity"
+            android:hint="@string/article_availability"
             android:inputType="number" />
 
         <EditText
@@ -51,12 +53,23 @@
             android:layout_marginLeft="@dimen/medium_spacing"
             android:layout_marginRight="@dimen/medium_spacing"
             android:layout_weight="1"
-            android:hint="Price"
+            android:hint="@string/article_price"
             android:inputType="numberDecimal" />
     </LinearLayout>
 
 
-    <ImageButton
+    <TextView
+        android:id="@+id/required"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="@dimen/medium_spacing"
+        android:layout_marginRight="@dimen/medium_spacing"
+        android:textSize="@dimen/mini_text"
+        android:textStyle="italic"
+        android:textColor="@color/colorPrimary"/>
+
+    <Button
         android:id="@+id/save_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -64,6 +77,6 @@
         android:layout_margin="@dimen/medium_spacing"
         android:background="@color/colorAccent"
         android:padding="@dimen/medium_spacing"
-        android:src="@drawable/ic_save" />
+        android:text="Save"/>
 
 </LinearLayout>

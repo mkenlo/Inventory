@@ -5,9 +5,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,7 +26,23 @@ public class AddActivity extends AppCompatActivity {
     TextView itemQuantity;
     TextView itemPrice;
     ImageView itemImage;
-    ImageButton itemSave;
+    Button itemSave;
+
+    private final TextWatcher validator = new TextWatcher() {
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        public void afterTextChanged(Editable s) {
+            if (s.length() == 0) {
+                TextView required = (TextView) findViewById(R.id.required);
+                required.setText("All fields are required");
+            }
+        }
+    };
 
 
     @Override
@@ -36,16 +55,31 @@ public class AddActivity extends AppCompatActivity {
         itemQuantity = (TextView) findViewById(R.id.article_quantity);
         itemPrice = (TextView) findViewById(R.id.article_price);
         itemImage = (ImageView) findViewById(R.id.article_image);
-        itemSave = (ImageButton) findViewById(R.id.save_item);
+        itemSave = (Button) findViewById(R.id.save_item);
+
+        itemName.addTextChangedListener(validator);
+        itemDescription.addTextChangedListener(validator);
+        itemQuantity.addTextChangedListener(validator);
+        itemPrice.addTextChangedListener(validator);
 
         itemSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            if (addNewItem(v) != null) {
-                Toast.makeText(v.getContext(), "Item saved", Toast.LENGTH_LONG);
-                Intent intent = new Intent(v.getContext(), MainActivity.class);
-                startActivity(intent);
-            } else Toast.makeText(v.getContext(), "Oups!! Error occured", Toast.LENGTH_LONG);
+                boolean valid = validateInput(itemName.getText().toString()) &&
+                        validateInput(itemDescription.getText().toString()) &&
+                        validateInput(itemQuantity.getText().toString()) &&
+                        validateInput(itemPrice.getText().toString());
+
+                if (valid && addNewItem(v) != null) {
+                    Intent intent = new Intent(v.getContext(), MainActivity.class);
+                    startActivity(intent);
+                } else if (!valid){
+                    TextView required = (TextView) findViewById(R.id.required);
+                    required.setText("All fields are required");
+                }else{
+                    Toast.makeText(v.getContext(), "Oops!! Error occurred", Toast.LENGTH_LONG).show();
+                }
+
             }
         });
 
@@ -69,6 +103,11 @@ public class AddActivity extends AppCompatActivity {
 
     }
 
+    public boolean validateInput(String value) {
+        if (value.isEmpty())
+            return false;
+        return true;
+    }
 
 
 }
