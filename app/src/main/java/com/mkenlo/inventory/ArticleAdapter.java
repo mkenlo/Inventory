@@ -42,7 +42,7 @@ public class ArticleAdapter extends CursorAdapter {
             @Override
             public void onClick(View view) {
 
-                article_quantity.setText(String.valueOf(quantity-1));
+                article_quantity.setText(String.valueOf(quantity - 1));
 
                 //save value
             }

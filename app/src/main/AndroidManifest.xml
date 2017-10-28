@@ -28,7 +28,8 @@
         </activity>
         <activity
             android:name=".DetailActivity"
-            android:label="Item detail">
+            android:label="Item detail"
+            android:parentActivityName="com.mkenlo.inventory.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />

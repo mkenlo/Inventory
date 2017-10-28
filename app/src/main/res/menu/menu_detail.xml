@@ -4,16 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
-        android:id="@+id/menu_edit"
-        android:icon="@drawable/ic_mode_edit"
+        android:id="@+id/menu_delete"
+        android:icon="@drawable/ic_delete"
         app:showAsAction="ifRoom"
-        android:title="Edit" />
+        android:title="Delete" />
 
     <item
-        android:id="@+id/menu_save"
-        android:icon="@drawable/ic_save"
+        android:id="@+id/menu_order"
+        android:icon="@drawable/ic_add_to_shopping_bag"
         app:showAsAction="ifRoom"
-        android:title="Save" />
+        android:title="Order more" />
 
     <item
         android:id="@+id/menu_preferences"
