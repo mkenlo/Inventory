@@ -1,8 +1,11 @@
 package com.mkenlo.inventory.adapter;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +21,10 @@ import com.mkenlo.inventory.data.InventoryContract;
 
 public class ArticleAdapter extends CursorAdapter {
 
+    private Context context;
     public ArticleAdapter(Context context, Cursor c) {
         super(context, c);
+        this.context = context;
     }
 
     @Override
@@ -34,7 +39,7 @@ public class ArticleAdapter extends CursorAdapter {
         ImageView article_image = (ImageView) view.findViewById(R.id.article_image);
 
         String name = cursor.getString(cursor.getColumnIndexOrThrow(InventoryContract.Entries.ARTICLE_NAME));
-        final int quantity = cursor.getInt(cursor.getColumnIndexOrThrow(InventoryContract.Entries.ARTICLE_QUANTITY));
+        int quantity = cursor.getInt(cursor.getColumnIndexOrThrow(InventoryContract.Entries.ARTICLE_QUANTITY));
 
         article_name.setText(name);
         article_quantity.setText(String.valueOf(quantity));
@@ -42,11 +47,22 @@ public class ArticleAdapter extends CursorAdapter {
         if (imageBitmap != null)
             article_image.setImageBitmap(imageBitmap);
 
+        final Uri itemUri = ContentUris.withAppendedId(InventoryContract.CONTENT_URI,
+                cursor.getInt(cursor.getColumnIndexOrThrow(InventoryContract.Entries.ARTICLE_ID)));
+
+
+
         Button shopItem = (Button) view.findViewById(R.id.shop_article);
         shopItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                article_quantity.setText(String.valueOf(quantity - 1));
+                int qty = Integer.valueOf(article_quantity.getText().toString());
+                if (qty>0){
+                    qty = qty -1;
+                    article_quantity.setText(String.valueOf(qty));
+                    updateItem(qty, itemUri);
+                }
+
             }
         });
     }
@@ -56,5 +72,9 @@ public class ArticleAdapter extends CursorAdapter {
         return super.getItem(position);
     }
 
-
+    private void updateItem(int qty, Uri itemUri){
+        ContentValues values = new ContentValues();
+        values.put(InventoryContract.Entries.ARTICLE_QUANTITY, qty);
+        context.getContentResolver().update(itemUri, values, null, null);
+    }
 }

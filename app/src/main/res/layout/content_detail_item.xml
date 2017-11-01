@@ -17,15 +17,19 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/thumbnail_height"
             android:scaleType="center"
-            android:layout_marginTop="@dimen/medium_spacing"/>
+            android:layout_marginTop="@dimen/small_spacing"/>
 
         <TextView
             android:id="@+id/article_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/medium_spacing"
+            android:layout_marginBottom="@dimen/small_spacing"
+            android:layout_marginLeft="@dimen/medium_spacing"
+            android:layout_marginRight="@dimen/medium_spacing"
             android:text="@string/article_name"
-            android:textSize="@dimen/large_text" />
+            android:textAllCaps="false"
+            android:textSize="@dimen/large_text"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -50,7 +54,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/medium_spacing"
+            android:layout_marginBottom="@dimen/small_spacing"
             android:layout_marginLeft="@dimen/medium_spacing"
             android:layout_marginRight="@dimen/medium_spacing"
             android:textColor="@color/colorSecondaryText"
@@ -66,7 +70,16 @@
             android:text="@string/article_description" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/article_quantity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="15"
+            android:textColor="@color/colorPrimaryDark"
+            android:textAlignment="center"
+            android:textSize="32sp"
+            android:textStyle="bold" />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/medium_spacing"
@@ -77,19 +90,22 @@
         <android.support.v7.widget.ButtonBarLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/medium_spacing">
             <Button
                 android:id="@+id/decrement_quantity"
                 android:layout_width="@dimen/button"
                 android:layout_height="@dimen/button"
                 android:text="-"
                 android:background="@color/colorPrimaryLight"/>
-            <TextView
-                android:id="@+id/article_quantity"
+
+            <EditText
+                android:id="@+id/article_quantity_adjust"
                 android:layout_width="@dimen/button"
                 android:layout_height="@dimen/button"
-                android:text="0"
-                android:textAlignment="center"/>
+                android:inputType="number"
+                android:text="1"
+                android:textAlignment="center" />
             <Button
                 android:id="@+id/increment_quantity"
                 android:layout_width="@dimen/button"

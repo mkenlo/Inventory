@@ -40,6 +40,14 @@ public final class InventoryContract {
         public static final String ARTICLE_PRICE = "articlePrice";
         public static final String ARTICLE_QUANTITY = "articleQuantity";
 
+        public static final String TABLE_SUPPLIER = "suppliers";
+        public static final String SUPPLIER_ID = BaseColumns._ID;
+        public static final String SUPPLIER_NAME = "supplierName";
+        public static final String SUPPLIER_ADDRESS = "supplierAddress";
+        public static final String SUPPLIER_PHONE = "supplierPhone";
+        public static final String SUPPLIER_WEBSITE = "supplierWebsite";
+
+
         public static final String[] PROJECTION = {
                 ARTICLE_ID,
                 ARTICLE_NAME,

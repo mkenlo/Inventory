@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.net.Uri;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -50,6 +51,7 @@ public class DetailActivity extends AppCompatActivity {
         item.setId(intent.getLongExtra("itemId", 1));
         itemUri = ContentUris.withAppendedId(InventoryContract.CONTENT_URI, item.getId());
         updateUI();
+
 
         incrementButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,13 +96,15 @@ public class DetailActivity extends AppCompatActivity {
 
     public void adjustItemQuantity(String order) {
         int qty = item.getQuantity();
+        EditText adjustView = (EditText) findViewById(R.id.article_quantity_adjust);
+        int adjust = Integer.valueOf(adjustView.getText().toString());
         switch (order) {
             case "increment":
-                item.setQuantity(qty+1);
+                item.setQuantity(qty+adjust);
                 break;
             case "decrement":
-                if(qty>0)
-                    item.setQuantity(qty-1);
+                if(qty>0 && qty>adjust)
+                    item.setQuantity(qty-adjust);
                 break;
         }
         updateItem();
