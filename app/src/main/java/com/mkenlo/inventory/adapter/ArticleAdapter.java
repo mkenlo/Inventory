@@ -1,7 +1,8 @@
-package com.mkenlo.inventory;
+package com.mkenlo.inventory.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +11,12 @@ import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mkenlo.inventory.R;
+import com.mkenlo.inventory.Utils;
 import com.mkenlo.inventory.data.InventoryContract;
 
 
 public class ArticleAdapter extends CursorAdapter {
-
 
     public ArticleAdapter(Context context, Cursor c) {
         super(context, c);
@@ -36,15 +38,15 @@ public class ArticleAdapter extends CursorAdapter {
 
         article_name.setText(name);
         article_quantity.setText(String.valueOf(quantity));
+        Bitmap imageBitmap = Utils.decodeItemImage(cursor.getString(cursor.getColumnIndexOrThrow(InventoryContract.Entries.ARTICLE_IMAGE)));
+        if (imageBitmap != null)
+            article_image.setImageBitmap(imageBitmap);
 
         Button shopItem = (Button) view.findViewById(R.id.shop_article);
         shopItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 article_quantity.setText(String.valueOf(quantity - 1));
-
-                //save value
             }
         });
     }
@@ -53,4 +55,6 @@ public class ArticleAdapter extends CursorAdapter {
     public Object getItem(int position) {
         return super.getItem(position);
     }
+
+
 }

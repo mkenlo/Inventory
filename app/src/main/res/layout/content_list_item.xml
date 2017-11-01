@@ -7,50 +7,54 @@
 
     <ImageView
         android:id="@+id/article_image"
-        android:layout_width="64dp"
-        android:layout_height="48dp"
-        android:src="@drawable/ic_add_a_photo"
+        android:layout_width="@dimen/icon_width"
+        android:layout_height="@dimen/icon_height"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"/>
+        android:src="@drawable/ic_add_a_photo" />
+
     <TextView
         android:id="@+id/article_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/article_name"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="@dimen/medium_spacing"
         android:layout_toEndOf="@id/article_image"
         android:layout_toRightOf="@id/article_image"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="@dimen/medium_spacing"/>
+        android:text="@string/article_name" />
+
     <TextView
         android:id="@+id/article_availability"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Available : "
-        android:textColor="@color/colorSecondaryText"
-        android:textStyle="italic"
         android:layout_alignBaseline="@+id/article_quantity"
         android:layout_alignBottom="@+id/article_quantity"
         android:layout_alignLeft="@+id/article_name"
-        android:layout_alignStart="@+id/article_name" />
+        android:layout_alignStart="@+id/article_name"
+        android:text="Available : "
+        android:textColor="@color/colorSecondaryText"
+        android:textStyle="italic" />
+
     <TextView
         android:id="@+id/article_quantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="12"
         android:layout_alignBottom="@+id/shop_article"
+        android:layout_toEndOf="@+id/article_availability"
         android:layout_toRightOf="@+id/article_availability"
-        android:layout_toEndOf="@+id/article_availability" />
+        android:text="12" />
+
     <Button
         android:id="@+id/shop_article"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorPrimaryDark"
         android:text="sale"
         android:textAllCaps="false"
-        android:background="@color/colorPrimaryDark"
-        android:textColor="@color/colorWhite"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:textColor="@color/colorWhite" />
 
 
 </RelativeLayout>

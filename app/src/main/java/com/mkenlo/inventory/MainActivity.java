@@ -10,20 +10,16 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 
 
+import com.mkenlo.inventory.adapter.ArticleAdapter;
 import com.mkenlo.inventory.data.InventoryContract;
 
 
 public class MainActivity extends AppCompatActivity {
 
-
-    ArticleAdapter mAdapter;
-    ListView itemListView;
-    Button shopItem;
-    final static String[] projection = InventoryContract.Entries.PROJECTION;
+    private final static String[] projection = InventoryContract.Entries.PROJECTION;
 
 
     @Override
@@ -44,17 +40,27 @@ public class MainActivity extends AppCompatActivity {
 
 
         Cursor cursor = getContentResolver().query(InventoryContract.CONTENT_URI, projection, null, null, null);
-        itemListView = (ListView) findViewById(R.id.article_list);
-        mAdapter = new ArticleAdapter(this, cursor);
-        itemListView.setAdapter(mAdapter);
-        itemListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent detail = new Intent(view.getContext(), DetailActivity.class);
-                detail.putExtra("itemId", id);
-                startActivity(detail);
-            }
-        });
+        ListView itemListView = (ListView) findViewById(R.id.article_list);
+
+        if (cursor.getCount() == 0) {
+            View emptyList = findViewById(R.id.empty_list);
+            emptyList.setVisibility(View.VISIBLE);
+            itemListView.setEmptyView(emptyList);
+        } else {
+            View emptyList = findViewById(R.id.empty_list);
+            emptyList.setVisibility(View.GONE);
+            ArticleAdapter mAdapter = new ArticleAdapter(this, cursor);
+            itemListView.setAdapter(mAdapter);
+            itemListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent detail = new Intent(view.getContext(), DetailActivity.class);
+                    detail.putExtra("itemId", id);
+                    startActivity(detail);
+                }
+            });
+
+        }
 
     }
 

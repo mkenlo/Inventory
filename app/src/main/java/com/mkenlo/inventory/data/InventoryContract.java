@@ -5,7 +5,7 @@ import android.content.ContentResolver;
 import android.provider.BaseColumns;
 import android.net.Uri;
 
-public class InventoryContract {
+public final class InventoryContract {
 
     public static final String AUTHORITY = "com.mkenlo.inventory";
 
@@ -37,7 +37,6 @@ public class InventoryContract {
         public static final String ARTICLE_NAME = "articleName";
         public static final String ARTICLE_IMAGE = "articleImage";
         public static final String ARTICLE_DESCRIPTION = "articleDescription";
-        public static final String ARTICLE_CATEGORY = "articleCategory";
         public static final String ARTICLE_PRICE = "articlePrice";
         public static final String ARTICLE_QUANTITY = "articleQuantity";
 

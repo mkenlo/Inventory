@@ -2,31 +2,32 @@ package com.mkenlo.inventory;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mkenlo.inventory.data.InventoryContract;
 
+import java.io.IOException;
 
 public class AddActivity extends AppCompatActivity {
 
-    TextView itemName;
-    TextView itemDescription;
-    TextView itemQuantity;
-    TextView itemPrice;
-    ImageView itemImage;
-    Button itemSave;
+    private TextView itemName;
+    private TextView itemDescription;
+    private TextView itemQuantity;
+    private TextView itemPrice;
+    private ImageButton itemImage;
+    private String itemImageEncode;
+    private static final int REQUEST_IMAGE_PICK = 1;
 
     private final TextWatcher validator = new TextWatcher() {
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -54,29 +55,38 @@ public class AddActivity extends AppCompatActivity {
         itemDescription = (TextView) findViewById(R.id.article_description);
         itemQuantity = (TextView) findViewById(R.id.article_quantity);
         itemPrice = (TextView) findViewById(R.id.article_price);
-        itemImage = (ImageView) findViewById(R.id.article_image);
-        itemSave = (Button) findViewById(R.id.save_item);
+        itemImage = (ImageButton) findViewById(R.id.article_image);
+        Button itemSave = (Button) findViewById(R.id.save_item);
 
         itemName.addTextChangedListener(validator);
         itemDescription.addTextChangedListener(validator);
         itemQuantity.addTextChangedListener(validator);
         itemPrice.addTextChangedListener(validator);
 
+        itemImageEncode = null;
+
+        itemImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pickPhoto(v);
+            }
+        });
+
         itemSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean valid = validateInput(itemName.getText().toString()) &&
-                        validateInput(itemDescription.getText().toString()) &&
-                        validateInput(itemQuantity.getText().toString()) &&
-                        validateInput(itemPrice.getText().toString());
-
-                if (valid && addNewItem(v) != null) {
+                boolean valid = !itemName.getText().toString().isEmpty() &&
+                        !itemDescription.getText().toString().isEmpty() &&
+                        !itemQuantity.getText().toString().isEmpty() &&
+                        !itemPrice.getText().toString().isEmpty();
+                if (itemImageEncode == null) {
+                    Toast.makeText(v.getContext(), "Select a photo", Toast.LENGTH_LONG).show();
+                } else if (!valid) {
+                    Toast.makeText(v.getContext(), "All fields are required", Toast.LENGTH_LONG).show();
+                } else if (addNewItem() != null) {
                     Intent intent = new Intent(v.getContext(), MainActivity.class);
                     startActivity(intent);
-                } else if (!valid){
-                    TextView required = (TextView) findViewById(R.id.required);
-                    required.setText("All fields are required");
-                }else{
+                } else {
                     Toast.makeText(v.getContext(), "Oops!! Error occurred", Toast.LENGTH_LONG).show();
                 }
 
@@ -86,28 +96,40 @@ public class AddActivity extends AppCompatActivity {
 
     }
 
-    public Uri addNewItem(View v) {
+    private Uri addNewItem() {
 
         String qty = itemQuantity.getText().toString();
         String price = itemPrice.getText().toString();
-        String imgLink = "Dummy string image";
 
         ContentValues values = new ContentValues();
         values.put(InventoryContract.Entries.ARTICLE_NAME, itemName.getText().toString());
         values.put(InventoryContract.Entries.ARTICLE_DESCRIPTION, itemDescription.getText().toString());
         values.put(InventoryContract.Entries.ARTICLE_QUANTITY, Integer.valueOf(qty));
         values.put(InventoryContract.Entries.ARTICLE_PRICE, Double.valueOf(price));
-        values.put(InventoryContract.Entries.ARTICLE_IMAGE, imgLink);
+        values.put(InventoryContract.Entries.ARTICLE_IMAGE, itemImageEncode);
 
         return getContentResolver().insert(InventoryContract.CONTENT_URI, values);
 
     }
 
-    public boolean validateInput(String value) {
-        if (value.isEmpty())
-            return false;
-        return true;
+    public void pickPhoto(View v) {
+        Intent choosePictureIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(choosePictureIntent, REQUEST_IMAGE_PICK);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_PICK && resultCode == RESULT_OK) {
+            Bitmap imageBitmap;
+            try {
+                imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
+                itemImage.setImageBitmap(imageBitmap);
+                itemImageEncode = Utils.encodeItemImage(imageBitmap);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
 
 }

@@ -6,6 +6,6 @@
     android:layout_height="match_parent"
     tools:context="com.mkenlo.inventory.DetailActivity">
 
-    <include layout="@layout/content_detail_item"/>
+    <include layout="@layout/content_detail_item" />
 
 </android.support.design.widget.CoordinatorLayout>

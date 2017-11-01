@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,25 +16,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mkenlo.inventory.data.ArticleModel;
 import com.mkenlo.inventory.data.InventoryContract;
 
-import static java.security.AccessController.getContext;
 
 public class DetailActivity extends AppCompatActivity {
 
-    TextView itemName;
-    TextView itemQuantity;
-    TextView itemPrice;
-    TextView itemDescription;
-    ImageView article_image;
-    Button incrementButton;
-    Button decrementButton;
-    ArticleModel item;
-    long article_id;
-    Uri itemUri;
+    private TextView itemName;
+    private TextView itemQuantity;
+    private TextView itemPrice;
+    private TextView itemDescription;
+    private ImageView itemImage;
+    private ArticleModel item;
+    private Uri itemUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +40,10 @@ public class DetailActivity extends AppCompatActivity {
         itemQuantity = (TextView) findViewById(R.id.article_quantity);
         itemPrice = (TextView) findViewById(R.id.article_price);
         itemDescription = (TextView) findViewById(R.id.article_description);
-        article_image = (ImageView) findViewById(R.id.article_image);
-        incrementButton = (Button) findViewById(R.id.increment_quantity);
-        decrementButton = (Button) findViewById(R.id.decrement_quantity);
+        itemImage = (ImageView) findViewById(R.id.article_image);
+        Button incrementButton = (Button) findViewById(R.id.increment_quantity);
+        Button decrementButton = (Button) findViewById(R.id.decrement_quantity);
         item = new ArticleModel();
-
 
         Intent intent = getIntent();
 
@@ -115,11 +110,11 @@ public class DetailActivity extends AppCompatActivity {
     public void updateItem() {
         ContentValues values = new ContentValues();
         values.put(InventoryContract.Entries.ARTICLE_QUANTITY, item.getQuantity());
-        int res = getContentResolver().update(itemUri, values, null, null);
+        getContentResolver().update(itemUri, values, null, null);
     }
 
     public void deleteItem() {
-        int res = getContentResolver().delete(itemUri, null, null);
+        getContentResolver().delete(itemUri, null, null);
         startActivity(getParentActivityIntent());
     }
 
@@ -129,7 +124,6 @@ public class DetailActivity extends AppCompatActivity {
                 .setTitle(R.string.alert_title);
         builder.setPositiveButton(R.string.positive_del, new AlertDialog.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                Toast.makeText(getBaseContext(), "User clicked Yes", Toast.LENGTH_LONG);
                 dialog.dismiss();
                 deleteItem();
             }
@@ -137,7 +131,6 @@ public class DetailActivity extends AppCompatActivity {
 
         builder.setNegativeButton(R.string.negative_del, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                Toast.makeText(getBaseContext(), "User cancelled", Toast.LENGTH_LONG);
                 dialog.cancel();
             }
         });
@@ -163,15 +156,13 @@ public class DetailActivity extends AppCompatActivity {
             itemName.setText(item.getName());
             itemQuantity.setText(String.valueOf(item.getQuantity()));
             itemPrice.setText(String.valueOf(item.getPrice()));
+            Bitmap imageBitmap= Utils.decodeItemImage(cursor.getString(cursor.getColumnIndexOrThrow(InventoryContract.Entries.ARTICLE_IMAGE)));
+            if (imageBitmap!=null)
+                itemImage.setImageBitmap(imageBitmap);
+            else itemImage.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
         }
 
-        /**
-         * TODO:  get Bitmap image from a string value
-         */
-        // article_image.setImageBitmap((cursor.getString(cursor.getColumnIndexOrThrow(InventoryContract.Entries.ARTICLE_IMAGE))));
+        cursor.close();
 
-        // MenuItem edit_menu = (MenuItem) findViewById(R.id.menu_edit);
-
-        // edit_menu.setIntent(edit);
     }
 }
