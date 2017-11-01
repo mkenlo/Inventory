@@ -47,7 +47,7 @@ public class ArticleAdapter extends CursorAdapter {
         if (imageBitmap != null)
             article_image.setImageBitmap(imageBitmap);
 
-        final Uri itemUri = ContentUris.withAppendedId(InventoryContract.CONTENT_URI,
+        final Uri itemUri = ContentUris.withAppendedId(InventoryContract.URI_ARTICLES,
                 cursor.getInt(cursor.getColumnIndexOrThrow(InventoryContract.Entries.ARTICLE_ID)));
 
 

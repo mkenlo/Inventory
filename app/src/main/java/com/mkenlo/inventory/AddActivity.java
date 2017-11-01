@@ -108,7 +108,7 @@ public class AddActivity extends AppCompatActivity {
         values.put(InventoryContract.Entries.ARTICLE_PRICE, Double.valueOf(price));
         values.put(InventoryContract.Entries.ARTICLE_IMAGE, itemImageEncode);
 
-        return getContentResolver().insert(InventoryContract.CONTENT_URI, values);
+        return getContentResolver().insert(InventoryContract.URI_ARTICLES, values);
 
     }
 

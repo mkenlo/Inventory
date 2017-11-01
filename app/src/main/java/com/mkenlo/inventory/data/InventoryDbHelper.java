@@ -10,7 +10,7 @@ import static com.mkenlo.inventory.data.InventoryContract.Entries.ARTICLE_IMAGE;
 import static com.mkenlo.inventory.data.InventoryContract.Entries.ARTICLE_NAME;
 import static com.mkenlo.inventory.data.InventoryContract.Entries.ARTICLE_PRICE;
 import static com.mkenlo.inventory.data.InventoryContract.Entries.ARTICLE_QUANTITY;
-import static com.mkenlo.inventory.data.InventoryContract.Entries.SUPPLIER_ADDRESS;
+import static com.mkenlo.inventory.data.InventoryContract.Entries.SUPPLIER_EMAIL;
 import static com.mkenlo.inventory.data.InventoryContract.Entries.SUPPLIER_ID;
 import static com.mkenlo.inventory.data.InventoryContract.Entries.SUPPLIER_NAME;
 import static com.mkenlo.inventory.data.InventoryContract.Entries.SUPPLIER_PHONE;
@@ -38,8 +38,8 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + TABLE_SUPPLIER + " (" +
                     SUPPLIER_ID + " INTEGER PRIMARY KEY," +
                     SUPPLIER_NAME + " TEXT," +
-                    SUPPLIER_ADDRESS + " TEXT, " +
-                    SUPPLIER_PHONE + " INTEGER," +
+                    SUPPLIER_EMAIL + " TEXT, " +
+                    SUPPLIER_PHONE + " TEXT," +
                     SUPPLIER_WEBSITE+ " TEXT )";
 
     private static final String DELETE_TABLE_ARTICLE =

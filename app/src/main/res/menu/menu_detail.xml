@@ -16,9 +16,9 @@
         android:title="Order more" />
 
     <item
-        android:id="@+id/menu_preferences"
+        android:id="@+id/menu_settings"
         app:showAsAction="never"
-        android:title="Preferences" />
+        android:title="Settings" />
 
 
 </menu>

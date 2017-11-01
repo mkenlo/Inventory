@@ -1,12 +1,16 @@
 package com.mkenlo.inventory;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,9 +21,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mkenlo.inventory.data.ArticleModel;
 import com.mkenlo.inventory.data.InventoryContract;
+
+import static com.mkenlo.inventory.data.InventoryContract.Entries.SUPPLIER_EMAIL;
+import static com.mkenlo.inventory.data.InventoryContract.Entries.SUPPLIER_ID;
+import static com.mkenlo.inventory.data.InventoryContract.Entries.SUPPLIER_NAME;
+import static com.mkenlo.inventory.data.InventoryContract.Entries.SUPPLIER_PHONE;
+import static com.mkenlo.inventory.data.InventoryContract.Entries.SUPPLIER_WEBSITE;
 
 
 public class DetailActivity extends AppCompatActivity {
@@ -31,6 +42,8 @@ public class DetailActivity extends AppCompatActivity {
     private ImageView itemImage;
     private ArticleModel item;
     private Uri itemUri;
+    private final static int MY_PERMISSIONS_REQUEST_CALL_PHONE = 1;
+    private boolean MY_PERMISSIONS_REQUEST_GRANTED = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +62,7 @@ public class DetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         item.setId(intent.getLongExtra("itemId", 1));
-        itemUri = ContentUris.withAppendedId(InventoryContract.CONTENT_URI, item.getId());
+        itemUri = ContentUris.withAppendedId(InventoryContract.URI_ARTICLES, item.getId());
         updateUI();
 
 
@@ -82,12 +95,11 @@ public class DetailActivity extends AppCompatActivity {
             case R.id.menu_delete:
                 confirmDeletion();
                 break;
-
             case R.id.menu_order:
-                Intent openPageIntent = new Intent();
-                openPageIntent.setAction(Intent.ACTION_VIEW);
-                openPageIntent.setData(Uri.parse("https://www.amazon.com/"));
-                startActivity(openPageIntent);
+                orderMoreArticle();
+                break;
+            case R.id.menu_settings:
+                startActivity(new Intent(this, SupplierActivity.class));
                 break;
         }
 
@@ -100,11 +112,11 @@ public class DetailActivity extends AppCompatActivity {
         int adjust = Integer.valueOf(adjustView.getText().toString());
         switch (order) {
             case "increment":
-                item.setQuantity(qty+adjust);
+                item.setQuantity(qty + adjust);
                 break;
             case "decrement":
-                if(qty>0 && qty>adjust)
-                    item.setQuantity(qty-adjust);
+                if (qty > 0 && qty > adjust)
+                    item.setQuantity(qty - adjust);
                 break;
         }
         updateItem();
@@ -160,13 +172,75 @@ public class DetailActivity extends AppCompatActivity {
             itemName.setText(item.getName());
             itemQuantity.setText(String.valueOf(item.getQuantity()));
             itemPrice.setText(String.valueOf(item.getPrice()));
-            Bitmap imageBitmap= Utils.decodeItemImage(cursor.getString(cursor.getColumnIndexOrThrow(InventoryContract.Entries.ARTICLE_IMAGE)));
-            if (imageBitmap!=null)
+            Bitmap imageBitmap = Utils.decodeItemImage(cursor.getString(cursor.getColumnIndexOrThrow(InventoryContract.Entries.ARTICLE_IMAGE)));
+            if (imageBitmap != null)
                 itemImage.setImageBitmap(imageBitmap);
             else itemImage.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
         }
 
         cursor.close();
 
+    }
+
+    public void orderMoreArticle() {
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CALL_PHONE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CALL_PHONE},
+                    MY_PERMISSIONS_REQUEST_CALL_PHONE);
+        }
+        else{
+            String phone = getSupplierInfo();
+            if (phone!=null)
+                makePhoneCall(phone);
+        }
+    }
+
+    public String getSupplierInfo(){
+        String projection[] = {SUPPLIER_ID,
+                SUPPLIER_NAME,
+                SUPPLIER_EMAIL,
+                SUPPLIER_PHONE,
+                SUPPLIER_WEBSITE};
+
+        Cursor cursor = getContentResolver().query(InventoryContract.URI_SUPPLIERS, projection, null, null, null);
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            String phone = cursor.getString(cursor.getColumnIndexOrThrow(SUPPLIER_PHONE));
+            cursor.close();
+            return phone;
+        } else {
+            Toast.makeText(this, "Add supplier info in Settings", Toast.LENGTH_LONG).show();
+            return null;
+        }
+    }
+
+    public void makePhoneCall(String phone) {
+        Intent callIntent = new Intent();
+        callIntent.setAction(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse("tel:" + phone));
+        Toast.makeText(this, "Calling Supplier at " + phone, Toast.LENGTH_LONG).show();
+        startActivity(callIntent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_CALL_PHONE: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    String phone = getSupplierInfo();
+                    if (phone!=null)
+                        makePhoneCall(phone);
+                } else {
+                    Toast.makeText(this, "Permissions request Denied", Toast.LENGTH_LONG).show();
+                }
+                return;
+            }
+        }
     }
 }

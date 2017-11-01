@@ -14,14 +14,17 @@ public class InventoryProvider extends ContentProvider {
 
     private static final int ARTICLE = 100;
     private static final int ARTICLE_ID = 200;
-    private static final int DELETED_ARTICLE = 500;
+    private static final int SUPPLIER = 300;
+    private static final int SUPPLIER_ID = 400;
 
 
     private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
-        sURIMatcher.addURI(InventoryContract.AUTHORITY, InventoryContract.CONTENT_PATH, ARTICLE);
-        sURIMatcher.addURI(InventoryContract.AUTHORITY, InventoryContract.CONTENT_PATH+"/#", ARTICLE_ID);
+        sURIMatcher.addURI(InventoryContract.AUTHORITY, InventoryContract.PATH_ARTICLES, ARTICLE);
+        sURIMatcher.addURI(InventoryContract.AUTHORITY, InventoryContract.PATH_ARTICLES + "/#", ARTICLE_ID);
+        sURIMatcher.addURI(InventoryContract.AUTHORITY, InventoryContract.PATH_SUPPLIERS, SUPPLIER);
+        sURIMatcher.addURI(InventoryContract.AUTHORITY, InventoryContract.PATH_SUPPLIERS + "/#", SUPPLIER_ID);
     }
 
     InventoryDbHelper mDbHelper;
@@ -40,6 +43,8 @@ public class InventoryProvider extends ContentProvider {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
         Cursor cursor = null;
         int match = sURIMatcher.match(uri);
+        String default_table = InventoryContract.Entries.TABLE_ARTICLE;
+
 
         switch (match) {
             case ARTICLE:
@@ -48,11 +53,19 @@ public class InventoryProvider extends ContentProvider {
                 selection = InventoryContract.Entries.ARTICLE_ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 break;
+            case SUPPLIER:
+                default_table = InventoryContract.Entries.TABLE_SUPPLIER;
+                break;
+            case SUPPLIER_ID:
+                default_table = InventoryContract.Entries.TABLE_SUPPLIER;
+                selection = InventoryContract.Entries.SUPPLIER_ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                break;
             default:
                 throw new IllegalArgumentException("Unknown URI" + uri);
         }
 
-        cursor = db.query(InventoryContract.Entries.TABLE_ARTICLE,
+        cursor = db.query(default_table,
                 projection,
                 selection,
                 selectionArgs,
@@ -67,15 +80,16 @@ public class InventoryProvider extends ContentProvider {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         int match = sURIMatcher.match(uri);
 
-        if ( match == ARTICLE){
+        if (match == ARTICLE) {
             long itemId = db.insert(InventoryContract.Entries.TABLE_ARTICLE, null, contentValues);
-            return itemId>0 ? ContentUris.withAppendedId(uri,itemId) : null;
-        }
-        else{
+            return itemId > 0 ? ContentUris.withAppendedId(uri, itemId) : null;
+        } else if (match == SUPPLIER) {
+            long itemId = db.insert(InventoryContract.Entries.TABLE_SUPPLIER, null, contentValues);
+            return itemId > 0 ? ContentUris.withAppendedId(uri, itemId) : null;
+        } else {
             throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-        //return null;
     }
 
     @Override
@@ -86,10 +100,10 @@ public class InventoryProvider extends ContentProvider {
          */
 
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        if (sURIMatcher.match(uri) == ARTICLE_ID){
+        if (sURIMatcher.match(uri) == ARTICLE_ID) {
             selection = InventoryContract.Entries.ARTICLE_ID + "=?";
             selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-            return db.delete(InventoryContract.Entries.TABLE_ARTICLE, selection,selectionArgs);
+            return db.delete(InventoryContract.Entries.TABLE_ARTICLE, selection, selectionArgs);
         }
         return 0;
     }
@@ -102,10 +116,10 @@ public class InventoryProvider extends ContentProvider {
          * UPDATE FROM ARTICLES WHERE ARTICLE_ID =?
          */
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        if (sURIMatcher.match(uri) == ARTICLE_ID){
+        if (sURIMatcher.match(uri) == ARTICLE_ID) {
             selection = InventoryContract.Entries.ARTICLE_ID + "=?";
             selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-            return db.update(InventoryContract.Entries.TABLE_ARTICLE, contentValues, selection,selectionArgs);
+            return db.update(InventoryContract.Entries.TABLE_ARTICLE, contentValues, selection, selectionArgs);
         }
         return 0;
     }

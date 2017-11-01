@@ -9,6 +9,7 @@
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:allowBackup="true"
@@ -48,6 +49,15 @@
             android:authorities="com.mkenlo.inventory"
             android:exported="false" />
 
+        <activity
+            android:name=".SupplierActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mkenlo.inventory.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

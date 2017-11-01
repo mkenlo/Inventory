@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        Cursor cursor = getContentResolver().query(InventoryContract.CONTENT_URI, projection, null, null, null);
+        Cursor cursor = getContentResolver().query(InventoryContract.URI_ARTICLES, projection, null, null, null);
         ListView itemListView = (ListView) findViewById(R.id.article_list);
 
         if (cursor.getCount() == 0) {
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            return true;
+            startActivity(new Intent(this, SupplierActivity.class));
         }
 
         return super.onOptionsItemSelected(item);
