@@ -35,14 +35,17 @@ public class ArticleAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         TextView article_name = (TextView) view.findViewById(R.id.article_name);
+        TextView article_price = (TextView) view.findViewById(R.id.article_price);
         final TextView article_quantity = (TextView) view.findViewById(R.id.article_quantity);
         ImageView article_image = (ImageView) view.findViewById(R.id.article_image);
 
         String name = cursor.getString(cursor.getColumnIndexOrThrow(InventoryContract.Entries.ARTICLE_NAME));
         int quantity = cursor.getInt(cursor.getColumnIndexOrThrow(InventoryContract.Entries.ARTICLE_QUANTITY));
+        double price = cursor.getDouble(cursor.getColumnIndexOrThrow(InventoryContract.Entries.ARTICLE_PRICE));
 
         article_name.setText(name);
         article_quantity.setText(String.valueOf(quantity));
+        article_price.setText(String.valueOf(price));
         Bitmap imageBitmap = Utils.decodeItemImage(cursor.getString(cursor.getColumnIndexOrThrow(InventoryContract.Entries.ARTICLE_IMAGE)));
         if (imageBitmap != null)
             article_image.setImageBitmap(imageBitmap);
